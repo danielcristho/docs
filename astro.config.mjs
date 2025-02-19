@@ -13,10 +13,8 @@ export default defineConfig({
 			sidebar: [
 				{ label: 'Intro', slug: 'index' },
 				{
-					label: 'Guides',
-					items: [
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
+					label: 'Linux',
+					autogenerate: { directory: 'linux' },
 				},
 				{
 					label: 'Reference',

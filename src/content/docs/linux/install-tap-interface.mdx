@@ -1,0 +1,17 @@
+---
+title: Install Interface Loopback (TAP) on Ubuntu 22.04
+lastUpdated: true
+---
+
+#### Install UML Utitilites
+
+```sh
+sudo apt install uml-utilities -y
+```
+
+#### Create virtual interface & assign IP Address
+
+```bash
+sudo tunctl -t tap10
+sudo ifconfig tap10 192.168.10.10 netmask 255.255.255.0 up
+```
