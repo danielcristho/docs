@@ -6,15 +6,15 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'My Docs',
+			title: "Daniel's Documentation",
 			social: {
-				github: 'https://github.com/withastro/starlight',
+				github: 'https://github.com/danielcristho',
 			},
 			sidebar: [
+				{ label: 'Intro', slug: 'index' },
 				{
 					label: 'Guides',
 					items: [
-						// Each item here is one entry in the navigation menu.
 						{ label: 'Example Guide', slug: 'guides/example' },
 					],
 				},
@@ -23,6 +23,7 @@ export default defineConfig({
 					autogenerate: { directory: 'reference' },
 				},
 			],
+			customCss: ["./src/styles/custom.css"]
 		}),
 	],
 });

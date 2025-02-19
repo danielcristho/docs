@@ -1,0 +1,60 @@
+.social-icons a svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* This might possibly overwrite all hero images */
+.hero img {
+	@media screen and (max-width: 799px) {
+		max-width: 10rem;
+	}
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+/* Dark mode colors. */
+:root {
+	--sl-color-accent-low: #312100;
+	--sl-color-accent: #2e8555;
+	--sl-color-accent-high: #2e8555;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #edeeed;
+	--sl-color-gray-2: #c1c2c1;
+	--sl-color-gray-3: #8a8c8b;
+	--sl-color-gray-4: #575857;
+	--sl-color-gray-5: #373837;
+	--sl-color-gray-6: #262726;
+	--sl-color-black: #181818;
+}
+/* Light mode colors. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #2e8555;
+	--sl-color-accent: #2e8555;
+	--sl-color-accent-high: #432e00;
+	--sl-color-white: #181818;
+	--sl-color-gray-1: #262726;
+	--sl-color-gray-2: #373837;
+	--sl-color-gray-3: #575857;
+	--sl-color-gray-4: #8a8c8b;
+	--sl-color-gray-5: #c1c2c1;
+	--sl-color-gray-6: #edeeed;
+	--sl-color-gray-7: #f6f6f6;
+	--sl-color-black: #ffffff;
+}
+
+/* Font size. */
+:root {
+    --sl-text-lg: 1rem;
+    --sl-text-xl: 0.5rem;
+    --sl-text-2xl: 1.5rem;
+}
+h1 {
+    font-size: 1.5rem !important;
+}
+
+/* :root {
+    --sl-content-width: 50rem;
+    --sl-text-5xl: 3.5rem;
+} */
