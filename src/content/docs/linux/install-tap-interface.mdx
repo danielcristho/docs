@@ -3,13 +3,13 @@ title: Configure TAP interface on Ubuntu 20.04
 lastUpdated: true
 ---
 
-### What is TAP interface?
+#### What is TAP interface?
 
 A TAP interface in Linux is a virtual network interface that allows communication between VMs and the host. It is used to emulate a layer 2 device.
 
 The TAP interface is another type of virtual network interface in Linux useful for emulating a layer 2 device. It allows Virtual Machines (VMs) to communicate with the host and other VMs on the same network. [Read this also](https://www.baeldung.com/linux/create-check-network-interfaces)
 
-### Install & Configure
+#### Install & Configure
 
 Install UML Utitilites
 
@@ -21,5 +21,8 @@ Create virtual interface & assign IP Address
 
 ```bash
 sudo tunctl -t tap10
+```
+
+```bash
 sudo ifconfig tap10 192.168.10.10 netmask 255.255.255.0 up
 ```
