@@ -18,8 +18,8 @@ export default defineConfig({
                 autogenerate: { directory: 'linux' },
             },
             {
-                label: 'Reference',
-                autogenerate: { directory: 'reference' },
+                label: 'Terminal',
+                autogenerate: { directory: 'terminal' },
             },
         ],
         customCss: ["./src/styles/custom.css"]
