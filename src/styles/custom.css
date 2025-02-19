@@ -45,11 +45,11 @@
 }
 
 /* Font size. */
-:root {
+/* :root {
     --sl-text-lg: 1rem;
     --sl-text-xl: 0.5rem;
     --sl-text-2xl: 1.5rem;
-}
+} */
 
 /* Heading */
 h1 {
