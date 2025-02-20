@@ -1,0 +1,46 @@
+---
+title: Collections of Docker Command
+lastUpdated: true
+---
+
+### Docker Container
+
+List the names and sizes of the containers:
+
+```bash
+docker ps -a --format '{{.Names}} {{.Size}}'
+```
+
+Delete all containers, including stopped ones:
+
+```bash
+docker rm $(docker ps -aq)
+```
+
+View real-time CPU and memory usage of containers:
+
+```bash
+docker stats | grep ''
+```
+
+Or:
+
+```bash
+docker stats | grep <container_name_or_id>
+```
+
+### Docker Image
+
+Delete all images, including both tagged and untagged ones:
+
+```bash
+docker rmi $(docker images -a -q)
+```
+
+### Docker in General
+
+Clean up all unused Docker resources, including containers, images, networks, and cache:
+
+```bash
+docker system prune -a
+```

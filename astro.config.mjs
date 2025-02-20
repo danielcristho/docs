@@ -14,6 +14,10 @@ export default defineConfig({
         sidebar: [
             { label: 'Intro', slug: 'index' },
             {
+                label: 'Docker',
+                autogenerate: { directory: 'docker' },
+            },
+            {
                 label: 'Linux',
                 autogenerate: { directory: 'linux' },
             },
