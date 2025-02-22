@@ -1,5 +1,5 @@
 ---
-title: Docker Command Collection
+title: Command Collection
 lastUpdated: true
 ---
 
@@ -39,8 +39,10 @@ docker rmi $(docker images -a -q)
 
 ### Docker in General
 
-Clean up all unused Docker resources, including containers, images, networks, and cache:
+---
 
-```bash
-docker system prune -a
+> 💡 **Tip:** Regularly pruning unused Docker resources can help prevent common errors and free up disk space:
+
+```sh
+docker system prune -a --volumes --force
 ```
