@@ -1,0 +1,19 @@
+---
+title: Troubleshooting
+lastUpdated: true
+---
+
+## Common Virtualbox Issues & Solutions
+
+**Error Message:**
+
+```
+Virtualbox kernel driver not installed (rc=-1908) Ubuntu 22.04 LTS
+```
+
+**Solution:**
+
+```sh
+sudo apt install virtualbox-dkms
+sudo modprobe vboxdrv
+```

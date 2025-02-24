@@ -1,0 +1,55 @@
+---
+title: Collection of Docker Compose Configuration
+lastUpdated: true
+---
+
+## **Set Static IP Addresses for Services**
+
+In Docker Compose, you can assign static IP addresses to your containers within a custom network. This ensures consistent communication between services, especially when specific IP addresses are required. [Docker Compose Network](https://docs.docker.com/reference/compose-file/networks/)
+
+> 💡 **Tip:**
+> Use a unique subnet (e.g., `172.99.0.0/24`) to avoid conflicts with existing networks. Verify active Docker networks by running:
+>
+> ```sh
+> docker network ls
+> ```
+
+---
+
+### **Configuration Example**
+
+```yml
+version: '3.9'
+
+services:
+  app:
+    image: your-app-image
+    container_name: app_service
+    ...
+    networks:
+      example_network:
+        ipv4_address: 172.99.0.10
+
+  db:
+    image: your-db-image
+    container_name: db_service
+    ...
+    networks:
+      example_network:
+        ipv4_address: 172.99.0.2
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_service
+    ...
+    networks:
+      example_network:
+        ipv4_address: 172.99.0.3
+
+networks:
+  example_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.99.0.0/24
+    external: false
