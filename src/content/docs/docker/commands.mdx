@@ -37,6 +37,22 @@ Delete all images, including both tagged and untagged ones:
 docker rmi $(docker images -a -q)
 ```
 
+Remove all <none> tag or dangling images:
+
+```sh
+docker images --filter "dangling=true"
+```
+
+```sh
+docker images -f "dangling=true" -q | xargs docker rmi
+```
+
+or
+
+```sh
+docker rmi $(docker images -f "dangling=true" -q)
+```
+
 ### Docker in General
 
 ---

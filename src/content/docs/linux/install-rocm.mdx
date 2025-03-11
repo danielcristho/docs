@@ -1,0 +1,42 @@
+---
+title: Install ROCM on Ubuntu 22.04
+lastUpdated: true
+---
+
+## What is ROCM
+
+> 💡 According to the documentation, ROCM is software stack that provides the tools for programming AMD Graphics Processing Units (GPUs), from low-level kernels to high-level end-user applications. **ROCM is used to extract HPC and AI workload performance from AMD Instinct accelerators and AMD Radeon GPUs**. [What is ROCM?](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
+
+
+### Install
+
+```sh
+sudo apt update
+sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+sudo apt install python3-setuptools python3-wheel
+sudo usermod -a -G render,video $LOGNAME # Add the current user to the render and video groups
+wget https://repo.radeon.com/amdgpu-install/6.3.3/ubuntu/jammy/amdgpu-install_6.3.60303-1_all.deb
+sudo apt install ./amdgpu-install_6.3.60303-1_all.deb
+```
+
+```sh
+sudo apt update
+sudo apt install amdgpu-dkms rocm
+```
+
+### Issue with dependencies
+
+> ⚠️ Possible Issues:
+
+- DKMS Build Failures – Errors while building the kernel module for AMDGPU drivers may cause amdgpu-dkms installation failures.
+- Broken Dependencies – Some ROCm packages depend on specific AMD driver versions, which might not be compatible with the system.
+- Crash Reports – Files like /var/crash/amdgpu-dkms.0.crash may indicate installation failures that need fixing.
+
+```sh
+sudo rm -rf /var/crash/amdgpu-dkms.0.crash
+sudo apt update
+```
+
+```sh
+sudo apt install --reinstall amdgpu-dkms
+```
