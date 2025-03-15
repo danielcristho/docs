@@ -1,0 +1,97 @@
+---
+title: "GitHub Actions: Deploy Static Site to Cloudflare Pages"
+lastUpdated: true
+---
+
+## First Scenario
+
+> Deploy directly from GitHub Actions to Cloudflare Pages and using [wrangler-action](https://github.com/cloudflare/wrangler-action) for authentication & deployment.
+
+```yaml
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Project
+        run: pnpm build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: "frontend-pages"
+          directory: "<dist_or_out>"
+```
+
+### Requirements
+
+- `CLOUDFLARE_API_TOKEN` & `CLOUDFLARE_ACCOUNT_ID`. See more here: [Cloudflare: GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions)
+- Ensure pnpm or npm is installed in the workflow.
+
+## Another Scenario
+
+> Deploys from a VPS/server that has a public IP, then uploads from the server to Cloudflare Pages. Useful for custom processing (e.g., caching, logs, pre-processing).
+
+```yaml
+name: CF | Upload Static Site from Server
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: SSH to server, run pnpm commands and upload static site to CF Pages
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/frontend && git pull origin main
+            export PATH=/root/.local/share/pnpm:/root/.nvm/versions/node/v20.18.0/bin:$PATH
+            pnpm install --frozen-lockfile && pnpm build
+            CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}" npx wrangler pages deploy /var/www/frontend/<dist_or_out> \
+            --project-name=frontend-pages
+```
+
+### Requirements
+
+- Requires `wrangler` CLI on the server. Follow this step to install wrangler: [Install/Update Wrangler
+](https://developers.cloudflare.com/workers/wrangler/install-and-update/)
+- Using [appleboy/ssh-action](https://github.com/appleboy/ssh-action) for SSH access (SSH_HOST, SSH_USER, SSH_PRIVATE_KEY).
+- pnpm/npm and Node.js are installed on the server.
+- `CLOUDFLARE_API_TOKEN` set in the server environment.
+
+### Workflow output
+
+```yml
+out: Uploading... (100/126)
+out: Uploading... (109/126)
+out: Uploading... (117/126)
+out: Uploading... (126/126)
+out: ✨ Success! Uploaded 26 files (100 already uploaded) (1.92 sec)
+out: 🌎 Deploying...
+out: ✨ Deployment complete! Take a peek over at https://xxyyzz.pages.dev
+```
