@@ -18,13 +18,17 @@ export default defineConfig({
                 autogenerate: { directory: 'docker' },
             },
             {
+                label: 'DevOps & Automation',
+                autogenerate: { directory: 'devops-and-automation' },
+            },
+            {
                 label: 'Linux',
                 autogenerate: { directory: 'linux' },
             },
             {
                 label: 'Terminal',
                 autogenerate: { directory: 'terminal' },
-            },
+            }
         ],
         customCss: ["./src/styles/custom.css"]
 		}), react()],
