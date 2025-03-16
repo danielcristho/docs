@@ -19,22 +19,33 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+        - name: Checkout Repository
+          uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: pnpm install
+        - uses: pnpm/action-setup@v4
+          name: Install pnpm
+          with:
+            run_install: false
 
-      - name: Build Project
-        run: pnpm build
+        - name: Install Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
+            cache: 'pnpm'
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: "frontend-pages"
-          directory: "<dist_or_out>"
+        - name: Install dependencies
+          run: pnpm install
+
+        - name: Run build
+          run: pnpm build
+
+        - name: Deploy to Cloudflare Pages
+          uses: cloudflare/wrangler-action@v3
+          with:
+            apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+            accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            projectName: "frontend-pages"
+            directory: "< dist_or_out>"
 ```
 
 ### Requirements
