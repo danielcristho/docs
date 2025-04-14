@@ -17,3 +17,35 @@ Virtualbox kernel driver not installed (rc=-1908) Ubuntu 22.04 LTS
 sudo apt install virtualbox-dkms
 sudo modprobe vboxdrv
 ```
+
+## Common Android Studio Issues & Solutions
+
+**Error Message:**
+
+```
+Process "/app/extra/android-studio/bin/studio" (2) is still running.
+If the process is an instance of the IDE, please collect the logs and contact support.
+If it isn't, please delete the stale "/home/.var/app/com.google.AndroidStudio/config/Google/AndroidStudio2024.3/.lock" file and restart the IDE.
+```
+
+> The message appears because Android Studio detects that there are still processes running (possibly from a previous session), and therefore the `.lock` file is not deleted normally.
+
+**Solution:**
+
+```bash
+$ ps aux | grep studio
+```
+
+```bash
+$ killall studio
+or
+$ pkill -f studio
+```
+
+```bash
+rm ~/.var/app/com.google.AndroidStudio/config/Google/AndroidStudio<VERSION>/.lock
+```
+
+```bash
+rm ~/.var/app/com.google.AndroidStudio/config/Google/AndroidStudio2024.3/.lock
+```
