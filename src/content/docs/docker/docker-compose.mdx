@@ -3,7 +3,7 @@ title: Collection of Docker Compose Configuration
 lastUpdated: true
 ---
 
-## **Set Static IP Addresses for Services**
+## **Set Static IP Addresses for Services using IPAM**
 
 In Docker Compose, you can assign static IP addresses to your containers within a custom network. This ensures consistent communication between services, especially when specific IP addresses are required. [Docker Compose Network](https://docs.docker.com/reference/compose-file/networks/)
 
@@ -15,8 +15,6 @@ In Docker Compose, you can assign static IP addresses to your containers within 
 > ```
 
 ---
-
-### **Configuration Example**
 
 ```yml
 version: '3.9'
