@@ -18,6 +18,10 @@ export default defineConfig({
                 autogenerate: { directory: 'docker' },
             },
             {
+                label: 'Kubernetes',
+                autogenerate: { directory: 'kubernetes' },
+            },
+            {
                 label: 'DevOps & Automation',
                 autogenerate: { directory: 'devops-and-automation' },
             },

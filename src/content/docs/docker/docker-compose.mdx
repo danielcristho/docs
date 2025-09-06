@@ -3,7 +3,7 @@ title: Collection of Docker Compose Configuration
 lastUpdated: true
 ---
 
-## **Set Static IP Addresses for Services using IPAM**
+## Set Static IP Addresses for Services using IPAM
 
 In Docker Compose, you can assign static IP addresses to your containers within a custom network. This ensures consistent communication between services, especially when specific IP addresses are required. [Docker Compose Network](https://docs.docker.com/reference/compose-file/networks/)
 
@@ -14,7 +14,7 @@ In Docker Compose, you can assign static IP addresses to your containers within 
 > docker network ls
 > ```
 
----
+### Example with Static IPs
 
 ```yml
 version: '3.9'
@@ -51,3 +51,187 @@ networks:
       config:
         - subnet: 172.99.0.0/24
     external: false
+```
+
+Inspect the created network to verify assignments:
+
+```sh
+docker network inspect example_network
+```
+### Set Multiple Subnets
+
+Defining multiple subnets in a single Docker network allows you to:
+
+> **1.** Separate groups of services (e.g., databases in one subnet, caches in another).
+
+> **2.** Use different routing or gateways for different traffic flows.
+
+> **3.** Allocate different IP address spaces for legacy services vs dynamic ones.
+
+```yml
+version: '3.9'
+
+services:
+  app:
+    image: your-app
+    networks:
+      example_network:
+        ipv4_address: 172.99.0.10
+
+  cache:
+    image: redis:7
+    networks:
+      example_network:
+        ipv4_address: 172.99.1.5
+
+networks:
+  example_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.99.0.0/24
+        - subnet: 172.99.1.0/24
+
+```
+
+### Set IP Range
+
+What it is / When to use?
+
+> The ip_range option restricts the pool of IP addresses Docker can dynamically assign within a subnet.
+This is useful when:
+
+> **1.** You want to reserve a portion of the subnet for static IP assignments.
+
+> **2.** You need stricter control over which addresses Docker is allowed to allocate.
+
+> **3.** You’re mixing static and dynamic IPs in the same subnet.
+
+```yml
+version: '3.9'
+
+services:
+  app1:
+    image: your-app
+    networks:
+      example_network: {}
+
+  app2:
+    image: your-app
+    networks:
+      example_network: {}
+
+  db:
+    image: postgres:16
+    networks:
+      example_network:
+        ipv4_address: 172.99.0.5   # static, outside the dynamic range
+
+networks:
+  example_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.99.0.0/24
+          ip_range: 172.99.0.128/25
+```
+
+## Add Healthcheck to Service
+
+> Ensure containers are only marked as healthy when their core functionality is available and responsive.  
+
+### API 
+
+```yml
+services:
+...
+  api:
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+...
+```
+
+### MySQL/MariaDB
+
+```yml
+services:
+...
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+...
+```
+
+### PostgreSQL
+
+```yml
+services:
+...
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d db -h localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+...
+```
+
+### Redis
+
+```yml
+services:
+...
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+...
+```
+
+> 💡 **Tips:**
+
+- Use a **dedicated lightweight endpoint** (e.g., `/health`) instead of hitting business logic routes.  
+- Configure **reasonable intervals and timeouts** (too frequent checks may overload the service).  
+- Add a **start period** for services that need warm-up time before they are ready.  
+- Ensure the healthcheck **matches real readiness**, not just process existence.  
+- Combine with **`depends_on: condition: service_healthy`** in Docker Compose to control startup order.  
