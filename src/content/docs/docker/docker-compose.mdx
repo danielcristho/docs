@@ -98,7 +98,7 @@ networks:
 
 What it is / When to use?
 
-> The ip_range option restricts the pool of IP addresses Docker can dynamically assign within a subnet.
+> The `ip_range` option restricts the pool of IP addresses Docker can dynamically assign within a subnet.
 This is useful when:
 
 > **1.** You want to reserve a portion of the subnet for static IP assignments.
@@ -230,8 +230,8 @@ services:
 
 > 💡 **Tips:**
 
-- Use a **dedicated lightweight endpoint** (e.g., `/health`) instead of hitting business logic routes.  
-- Configure **reasonable intervals and timeouts** (too frequent checks may overload the service).  
+- Use a **lightweight endpoint** (e.g., `/health`) instead of hitting the main routes.  
+- Configure **intervals and timeouts** (too frequent checks may overload the service).  
 - Add a **start period** for services that need warm-up time before they are ready.  
 - Ensure the healthcheck **matches real readiness**, not just process existence.  
 - Combine with **`depends_on: condition: service_healthy`** in Docker Compose to control startup order.  
